@@ -4,19 +4,26 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Source code checked out from GitHub'
+                git branch: 'main',
+                    url: 'https://github.com/VikashDeegwal/devops-cicd-project.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'PYTHONPATH=. pytest'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t devops-cicd-app:jenkins .'
-            }
-        }
-
-        stage('Test Application') {
-            steps {
-                echo 'Application test stage completed'
             }
         }
     }
